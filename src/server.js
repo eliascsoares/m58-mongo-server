@@ -24,6 +24,7 @@ app.get("/getBook", async (req, res) => {
     }
 
 })
+// Get all books
 
 app.post("/addBook", async (req, res) => {
    try {
@@ -49,6 +50,7 @@ app.post("/addBook", async (req, res) => {
     res.status(418).json(responseMessage)
    } 
 })
+// Add a book
 
 app.get("/getSingleBook", async function getSingleBook(req, res) {
     try {
@@ -64,6 +66,28 @@ app.get("/getSingleBook", async function getSingleBook(req, res) {
         res.status(500).json({ message: "Error retrieving book" });
     }
 });
+// Get a Single book using the title
+
+app.put("/updateAuthor", async function updateAuthor(req, res) {
+    try {
+        const title = req.body.title;
+        const newAuthor = req.body.author;
+        const updatedBook = await Book.findOneAndUpdate(
+            { title: title },
+            { author: newAuthor },
+            { new: true }
+        );
+        if (updatedBook) {
+            res.status(200).json(updatedBook);
+        } else {
+            res.status(404).json({ message: "Book not found" });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error updating book author" });
+    }
+});
+// Update the author 
 
 app.get("/health", (req, res) => {res.send("API is healthy")})
 //health route to verify server is running
