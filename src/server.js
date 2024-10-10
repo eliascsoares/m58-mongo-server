@@ -89,6 +89,27 @@ app.put("/updateAuthor", async function updateAuthor(req, res) {
 });
 // Update the author 
 
+app.put("/updateGenre", async function updateGenre(req, res) {
+    try {
+        const title = req.body.title;
+        const newGenre = req.body.genre;
+        const updatedBook = await Book.findOneAndUpdate(
+            { title: title },
+            { genre: newGenre },
+            { new: true }
+        );
+        if (updatedBook) {
+            res.status(200).json(updatedBook);
+        } else {
+            res.status(404).json({ message: "Book not found" });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error updating book genre" });
+    }
+});
+// Update book genre
+
 app.get("/health", (req, res) => {res.send("API is healthy")})
 //health route to verify server is running
 
