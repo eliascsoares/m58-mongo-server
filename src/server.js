@@ -11,6 +11,20 @@ require("./db/connection");
 
 const Book = require("./db/models/bookmodel");
 
+app.get("/getBook", async (req, res) => {
+    try {
+        const output = await Book.find({})
+        res.status(200).json(output) 
+    } catch (error) {
+        console.log(error);
+        const responseMessage = {
+            message: `Unable to find book list`
+        }
+        res.status(500).json(responseMessage)
+    }
+
+})
+
 app.post("/addBook", async (req, res) => {
    try {
     const result = await Book.create(
@@ -34,9 +48,22 @@ app.post("/addBook", async (req, res) => {
     }
     res.status(418).json(responseMessage)
    } 
-}
+})
 
-)
+app.get("/getSingleBook", async function getSingleBook(req, res) {
+    try {
+        const title = req.query.title;
+        const book = await Book.findOne({ title: title });
+        if (book) {
+            res.status(200).json(book);
+        } else {
+            res.status(404).json({ message: "Book not found" });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error retrieving book" });
+    }
+});
 
 app.get("/health", (req, res) => {res.send("API is healthy")})
 //health route to verify server is running
