@@ -110,6 +110,22 @@ app.put("/updateGenre", async function updateGenre(req, res) {
 });
 // Update book genre
 
+app.delete("/deleteBook", async function deleteBook(req, res) {
+    try {
+        const title = req.body.title;
+        const deletedBook = await Book.findOneAndDelete({ title: title });
+        if (deletedBook) {
+            res.status(200).json({ message: "Book deleted successfully" });
+        } else {
+            res.status(404).json({ message: "Book not found" });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error deleting book" });
+    }
+});
+// Delete a book
+
 app.get("/health", (req, res) => {res.send("API is healthy")})
 //health route to verify server is running
 
