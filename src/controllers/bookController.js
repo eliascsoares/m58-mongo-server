@@ -56,7 +56,7 @@ exports.addBook = async (req, res) => {
         }
         res.status(418).json(responseMessage)
        } 
-    }
+}
 // Add a book
 
 exports.updateAuthor = async (req, res) => {
@@ -116,3 +116,18 @@ exports.deleteBook = async (req, res) => {
     }
 };
 // Delete a Book
+
+exports.deleteAllBooks = async (req, res) => {
+    try {
+        const result = await Book.deleteMany({});
+        if (result.deletedCount > 0) {
+            res.status(200).json({ message: `${result.deletedCount} books deleted successfully` });
+        } else {
+            res.status(404).json({ message: "No books found to delete" });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error deleting all books" });
+    }
+};
+// Delete all the Book
